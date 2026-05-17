@@ -1,0 +1,19 @@
+Generate JUnit 5 + Mockito unit tests for the following API.
+
+Endpoint: {{endpoint}}
+Method: {{method}}
+Description: {{description}}
+
+Request Body:
+{{requestBody}}
+
+Response Body:
+{{responseBody}}
+
+Requirements:
+- Produce well-structured JUnit 5 tests.
+- Use Mockito to mock service layers and HTTP clients when appropriate.
+- Include positive and negative/edge test cases and assertions.
+- Keep imports minimal and the code copy-paste ready.
+
+Return only the Java test class source code.

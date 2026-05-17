@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>AI TestGen Frontend Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    textarea { width: 100%; height: 300px; }
+    input, button { padding: 8px; margin: 6px 0; }
+  </style>
+</head>
+<body>
+  <h2>AI TestGen - Generate Tests</h2>
+  <label>Endpoint: <input id="endpoint" value="POST /api/users" /></label><br/>
+  <label>Method: <input id="method" value="POST" /></label><br/>
+  <label>Description: <input id="description" value="Create new user" style="width:60%"/></label><br/>
+  <label>Request Body (JSON):</label><br/>
+  <textarea id="requestBody">{ "name": "John", "email": "john@example.com" }</textarea><br/>
+  <label>Response Body (JSON):</label><br/>
+  <textarea id="responseBody">{ "id": 1, "name": "John", "email": "john@example.com" }</textarea><br/>
+  <button id="generate">Generate Tests</button>
+  <h3>Generated Test Code</h3>
+  <textarea id="result" readonly placeholder="Generated code will appear here..."></textarea>
+
+  <script>
+    document.getElementById('generate').addEventListener('click', async () => {
+      const endpoint = document.getElementById('endpoint').value;
+      const method = document.getElementById('method').value;
+      const description = document.getElementById('description').value;
+      const requestBody = document.getElementById('requestBody').value;
+      const responseBody = document.getElementById('responseBody').value;
+
+      const payload = {
+        endpoint,
+        method,
+        description,
+        requestBody: requestBody,
+        responseBody: responseBody
+      };
+
+      try {
+        const res = await fetch('/api/generate-tests', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error('HTTP ' + res.status + ': ' + text);
+        }
+
+        const data = await res.json();
+        if (data.success) {
+          document.getElementById('result').value = data.data.testCode;
+        } else {
+          document.getElementById('result').value = 'Error from server: ' + (data.error || 'unknown');
+        }
+      } catch (err) {
+        document.getElementById('result').value = 'Request failed: ' + err.message;
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>

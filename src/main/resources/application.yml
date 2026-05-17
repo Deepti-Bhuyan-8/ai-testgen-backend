@@ -1,0 +1,12 @@
+server:
+  port: 8080
+
+# AI Service Configuration
+# Modes: mock (default, for testing), openai (requires API key), localai (requires Docker with LocalAI)
+ai:
+  service:
+    mode: mock
+
+openai:
+  base-url: ${OPENAI_BASE_URL:http://localhost:8081}
+  api-key: ${OPENAI_API_KEY:not-needed-for-mock}
